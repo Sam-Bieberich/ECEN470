@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+
+%%%%%%%%%%%%%%%%%%Added by Sam%%%%%%%%%%%%%%%%%%
+\usepackage[margin=25mm]{geometry}% <-------- CHANGE HERE for the global margins
+\usepackage{mathptmx} % for Times
+\renewcommand{\thesection}{\Roman{section}} 
+%\renewcommand{\thesubsection}{\Alph{subsection}}
+\usepackage{setspace}
+
+\doublespacing
+
+
+\usepackage{caption} %for captions on the figures
+\captionsetup{justification=centering}
+\usepackage{enumitem} % for the a b c itemized lists
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+\usepackage{tocloft}
+\usepackage[hidelinks]{hyperref} %makes the links for the bibliography and figs
+%symbolic footnote pointers
+\usepackage[symbol]{footmisc}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\usepackage[superscript, biblabel]{cite}
+
+
+%from this: https://tex.stackexchange.com/questions/424146/sections-subsections-numbering
+\renewcommand*{\thesection}{\Roman{section}.}
+\renewcommand*{\thesubsection}{\Alph{subsection}.}
+\renewcommand*{\thesubsubsection}{\arabic{subsubsection}.}
+\newlength{\subsubsectionnumberindent}
+\setlength{\subsubsectionnumberindent}{3ex}
+
+\addtolength{\cftsubsubsecnumwidth}{-3.5ex}
+
+
+\newcommand{\subsubsectionheadingformat}{%
+  \hskip\subsubsectionnumberindent\arabic{subsubsection}.\quad%
+}
+
+\makeatletter
+\let\latex@@seccntformat\@seccntformat
+\renewcommand{\@seccntformat}[1]{%
+  \ifnum0=\pdfstrcmp{#1}{subsubsection}%
+  \subsubsectionheadingformat%
+  \else
+  \latex@@seccntformat{#1}%
+  \fi
+}
+
+
+\bibliographystyle{acm} %Reference style.
+
+%%%%%%%%%%TITLE%%%%%%%%%%
+\title{\vspace{-2.4cm}History of the NSA - MATH 470}
+\author{Samuel Bieberich}
+
+\begin{document}
+\maketitle
+
+
+\section{Introduction}
+
+For over seventy years, the National Security Agency, often abbreviated as NSA, has performed critical intelligence collection for the United States Department of Defense (DoD). Through a combination of Signals Intelligence (SIGINT), High-Performance Computing, and the work of thousands of cryptanalysts, the NSA has played an important role in not only the U.S.'s interests internally and abroad, but also in the cryptography scene as a whole. 
+
+\section{Beginnings and The Cold War}
+
+After the widely accepted success of American codebreaking in World War II, including the particularly notable breaking of the Nazi Enigma ciphering system\cite{enigma}, the U.S. was poised to continue its use of cryptoanalysis. With the threat of the Soviet Union, now a nuclear power, and Communist North Korea provoking the Korean War, it soon became apparent that the WWII Signal Security Agency, one of the NSA's precursors, could not appropriately meet the same needs as it had during the war. After WWII, the SSA was redesignated as the Army Security Agency, which briefly broke Soviet Encryption before new methods made their practices irrelevant \cite{secret_sentry}. Due in part to this failure, the Armed Forces Security Agency (AFSA) was founded to attempt to remedy the increasingly dire situation, but due to a lack of funding compared to the similarly growing CIA (1947-), was unable to make any more headway than its predecessors. Fortunately, in 1952, President Truman was able to sign a directive to found the NSA right before losing the election\cite{Howe}, separating it definitively from the CIA and offering a new frontier for domestic SIGINT.
+
+After new president Dwight Eisenhower was sworn in in 1953, the NSA started on a bad foot by missing signs that Joseph Stalin, the Soviet Union's current dictator, was ill\cite{secret_sentry}. When Eisenhower learned of Stalin's death from the Associated Press, he was quick to blame the SIGINT community, resulting in a cold response to later crises the NSA observed. In the following years, small intelligence victories were made in the Eastern Bloc and the Middle East, but the administration did not at the time attribute much of the success to the NSA\cite{Hatch}. Also during this time, the NSA relocated to Fort Meade in between Baltimore and Washington D.C., where they are still based today.  
+
+\subsection{Cuban Missile Crisis}
+
+During the Kennedy Administration, global tensions rose to an all-time peak. At the time, the NSA had close to 17,000 personnel, and 50\% more funding than the CIA\cite{secret_sentry}. The first issue facing the administration regarded the ongoing Vietnam War, which the U.S. was getting closer to being drawn into. Second and more importantly, it became apparent due to CIA intelligence that thousands of Soviet workers and troops were being sent to Cuba, which was quickly and correctly assumed to be involved in the construction of missile silos\cite{cuban_missile}. At the time, Soviet communications security was extremely effective, and the NSA had terrible luck regarding the decryption. Fortunately, they had a chance to redeem themselves with the October 1962 Cuban Missile Crisis. As tensions rose and Kennedy ordered a blockade of Cuba, Soviet radio intercepts skyrocketed, signaling to the NSA that conflict may be imminent. After being given an ultimatum that fourteen submarine-escorted Soviet ships, presumably carrying warheads, were to turn around, the NSA operated around the clock October 24-25, waiting until all ships had turned around and honored the blockade. While this intelligence gathering was valuable, the NSA's inability to learn of the ballistic missiles in Cuba before the CIA found them with a U-2 flyover represented a significant failure, one that the NSA was determined to never make again \cite{cuban_chronology}. 
+
+\subsection{The Vietnam War}
+
+During the Johnson administration in the heat of the Vietnam War, the NSA made its gravest mistake yet in the infamous Gulf of Tonkin incident. The USS \textit{Maddox}, a destroyer refitted for SIGINT, was instructed by U.S. command to perform patrols as close as four miles from the North Vietnamese shore at the Gulf of Tonkin. On August 2, 1964, three NVN torpedo boats attacked the destroyer, leading to virtually no damage on the American side, and the torpedo boats retreating. On August 4th, the tools in the \textit{Maddox}, as well as communication intercepts on land, resulted in the U.S. forces firing onto a supposed enemy in the sea once again. This was decades later revealed to be a false alarm\cite{truth_about_tonkin}, at least embarrassing for the NSA and at worst, a political maneuver with deadly results. After this "confrontation," Congress signed the Gulf of Tonkin resolution, giving LBJ legal powers to assist Southeast Asian countries under communist attack, and thus justifying U.S. involvement in the war\cite{secret_sentry}. Unfortunately, this decisive incident defined public perception of the NSA for decades to come. 
+
+After the formal entrance into the Vietnam War, the U.S. and NSA had limited success in the coming years. Failures to predict the scale of the Tet Offensive, a violent, multi-pronged raid by over one hundred thousand North Vietnamese across the South, resulted in a domestic denouncement of the war, and by 1975, the situation was dire\cite{secret_sentry}. As the NVA marched into Saigon and the remaining South Vietnamese strongholds, thousands of SIGINT officers native to Vietnam were left behind, likely ending up murdered or imprisoned for their roles in helping the U.S\cite{signal_corp}.
+
+\section{Global Conflict and The War on Terror}
+
+After the collapse of the Soviet Union, much of the NSA's attention was quickly shifted to the Middle East, where in 1990 the Gulf War, provoked by Iraq, began. During this conflict, the NSA feasted on SIGINT from the relatively dated radio intelligence preferred by the Iraqi military \cite{secret_sentry}, leading to a decisive U.S. victory. 
+
+Tragically, the NSA's SIGINT methods were not enough to infiltrate the inner workings of al Qaeda, the terrorist organization led by Osama bin Laden that committed the 9/11 terrorist attacks. While the NSA had a history of tracking cell phones that terrorists were using, many calls were not discovered until after the attacks, and then only through phone billing records \cite{Select_Committee_on_Intelligence_2002}. Part of this was due to previous legal trouble, such as the 1978 Foreign Intelligence Surveillance Act, in which Congress had blasted the NSA for domestic intercepts \cite{justicedept}. This was restricted to the FBI, and due to disagreements between the two government institutions, al Qaeda was able to slip through. 
+
+After the initial U.S. response to the 9/11 attacks, the President pushed for the NSA to take a more aggressive stance on performing intelligence in the Middle East, particularly Iraq\cite{secret_sentry}. It was reported to the President, and then the American public, that the NSA found evidence of Iraqi Weapons of Mass Destruction (WMDs), particularly in the form of nuclear and chemical weapons\cite{Richelson_2003}. While it was determined that the NSA was producing Ballistic Missiles, the other claims were later proven false, but not before the Bush administration used this shaky SIGINT to justify the bombing of Iraq. 
+
+\section{Snowden and Accountability}
+
+Since 2010, much more information about the NSA has been released than ever before, albeit not by choice. In June 2013, Edward Snowden, a former NSA subcontractor, met with several journalists and leaked classified documents to The Guardian. In these leaked documents, it was revealed that U.S. government organizations, including the FBI and NSA, were performing digital surveillance on Americans (to some extent). The three main revelations were that the a) the FBI was collecting phone metadata (duration, numbers, etc.)\cite{Donnelly_Chakrabarti_2023}, b) the NSA had access to servers in various tech giants, including Google and Facebook\cite{MacAskill_2023}, and c) the NSA possessed a tool called BOUNDLESSINFORMANT\cite{Greenwald_MacAskill_2013} which they used to mine said collected data. It also confirmed the widely-held belief that the Stuxnet attack in Iran was in part led by the NSA, along with Israeli Intelligence\cite{cyberattack}.
+
+Since these public relations disasters, Congress has slowly stripped the NSA of some of the most aggressive powers it was afforded after 9/11. The sunsetting of section 215 of the PATRIOT Act resulted in the forced deletion of millions of phone records in 2018 \cite{snowden10}, and the tech giants "victim" to NSA hacks have reworked server security, though it is unknown if the NSA still has propriety access. Currently, the NSA is the largest consumer of High Performance Computing (HPC) resources in the U.S.\cite{secret_sentry}, implying a continued interest in mass data collection and breaking encryption. 
+
+\section{Conclusion}
+
+While the NSA has publically been a part of numerous infamous controversies, its humble beginnings and growth into a massive, projected 50,000-member agency are reminiscent of its success in the decades following the Second World War. As the Cold War raged, intelligence in the beginnings of the digital age changed the outlook of global relations and helped maintain U.S. interests in the USSR, China, Iraq, and Middle Eastern terrorist cells. Innovation helped the NSA to encrypt and decrypt messages in the new era at an astounding rate and has ensured their ability to stay ahead of the corporate curve in terms of cryptography. 
+
+Reflecting on the history of the NSA, it is critical to acknowledge the delicate balance between the need for security and the preservation of democratic values. The NSA has adapted, as SIGINT has, since 1952, and the lessons learned from its history should inform ongoing debates about the appropriate scope of intelligence gathering in a democratic society, as well as define the new era of cyberwarfare. 
+
+\clearpage
+
+\begin{singlespace}
+\bibliography{references}
+
+\end{singlespace}
+\end{document}

@@ -1,0 +1,293 @@
+%--------------------
+% Packages
+% -------------------
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{gentium}
+\usepackage{mathptmx} % Use Times Font
+
+
+\usepackage[pdftex]{graphicx} % Required for including pictures
+\usepackage[english]{babel}
+\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
+\usepackage{calc} % To reset the counter in the document after title page
+\usepackage{enumitem} % Includes lists
+
+\frenchspacing % No double spacing between sentences
+\linespread{1.2} % Set linespace
+\usepackage[a4paper, lmargin=0.1666\paperwidth, rmargin=0.1666\paperwidth, tmargin=0.1111\paperheight, bmargin=0.1111\paperheight]{geometry} %margins
+%\usepackage{parskip}
+
+\usepackage[all]{nowidow} % Tries to remove widows
+\usepackage[protrusion=true,expansion=true]{microtype} % Improves typography, load after fontpackage is selected
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+
+%-----------------------
+% Set pdf information and add title, fill in the fields
+%-----------------------
+\hypersetup{ 	
+pdfsubject = {},
+pdftitle = {},
+pdfauthor = {}
+}
+
+\usepackage{fancyhdr}
+
+% Clear default header and footer
+\fancyhf{}
+
+% Your name goes in the header
+\lhead{Samuel Bieberich - MATH 470 Honors Project 2, Miller-Rabin Test}
+
+% Set the page style to use the fancyhdr settings
+\pagestyle{fancy}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{mygreen}{rgb}{0.0, 0.5, 0.0}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{mygreen}, % Adjust the color here
+    stringstyle=\color{orange},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{gray!5},
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    captionpos=b,
+    tabsize=4,
+    showspaces=false,
+    showstringspaces=false
+}
+
+\lstset{style=mystyle}
+
+
+\usepackage{amsmath}
+\rfoot{\thepage}
+\usepackage{afterpage}
+\usepackage{graphicx}
+
+
+%-----------------------
+% Begin document
+%-----------------------
+\begin{document}
+
+\section{Problem Definition}
+
+The Miller-Rabin Test is a test to determine the probability that a number is a composite number. Repeated implementations can prove to a sufficient degree whether a number is prime or composite. With each test, the completion and determination that variable a is a Miller-Rabin Witness is 75\%, meaning that with $i$ iterations, the odds that the tested number is prime is $0.25^{i}$. With a large i, this is one of the most effective tests to determine very large prime numbers. 
+
+\section{Code Workthrough}
+
+I programmed the Miller-Rabin Test in Python, only using the $random$ and $math$ libraries. 
+
+\begin{lstlisting}
+import random
+import math
+\end{lstlisting}
+
+Random features functions that generate a random number in a specific range (among others). I use this in the code to find different $a$ values that may be used as potential witnesses to the compositeness of N. Math is used to perform the gcd function, which I need to determine if the Miller-Rabin test makes sense for a certain $a$ value. 
+
+After this, I created a function to run the Miller-Rabin Test. This function takes in two variables:
+
+\begin{enumerate}
+    \item N, the number with which I am testing the primality.
+    \item i, the number of iterations. Since the odds that a tested number is prime is $0.25^{i}$, I found it computationally reasonable to set i equal to anywhere from 10-100, which offers 
+\end{enumerate}
+    
+Starting the code as follows: 
+
+\vspace{3mm}
+
+\begin{lstlisting}
+def miller_rabin_test(N, i=10):
+    """
+    Perform the Miller-Rabin primality test on the number N.
+    returns true if the test is inconclusive/fails and N could be prime, and false otherwise if it is composite
+    """
+    if N == 2 or N == 3:
+        return True
+    if N == 1 or N % 2 == 0:
+        return False
+\end{lstlisting}
+
+The above section of the program ensures that when N is less than 4, there are no errors. Likewise, it ends the test if the number being tested is even (N \% 2), since by definition it must be composite. 
+
+\vspace{2mm}
+
+\begin{lstlisting}
+    #Writing N as 2^k*q
+    k = 0
+    q = N - 1
+    while q % 2 == 0:
+        k += 1
+        q //= 2
+\end{lstlisting}
+
+This while loop puts the $N-1$ value which I am testing into the form of $2^{k}q$. 
+
+\vspace{2mm}
+
+\begin{lstlisting}
+    #witness loop ( repeating k times unless broken by the return )
+    for j in range(k):
+        #choosing a random int between 2 and N-1-1 or N-2
+        a = random.randint(2, N - 2)
+        #breaks the loop if the gcd ever is not 1 (N is divisible by a or a product of it, automatically making it not prime)
+        if math.gcd(a, N) != 1:
+            return False
+
+        #defines x as a to the q mod N
+        x = pow(a, q, N)
+
+        #if x is ever 1 or -1, it will skip to the next iteration of the for loop above (k+1)
+        if x == 1 or x == N - 1:
+            continue
+\end{lstlisting}
+
+The expression x = pow(a, k, N) calculates the modular exponentiation of $a$ raised to the power of $k$, modulo N. Thus, as the problem is defined:
+
+\[x = a^{k}modN\]
+
+To finish off the above "witness loop," I added the steps for which the loop iterates from i = 1 to k-1, and if at any point a is equal to -1modN, the test fails, making it more likely to be prime. If this scenario happens, it breaks out of the for loop and returns. 
+
+\clearpage
+
+\begin{lstlisting}
+    for j in range(k - 1):
+            x = pow(x, 2, N)
+
+            #searching for when x = -1modN
+            if x == N - 1:
+                break
+        else:
+            return False
+    
+    #only returns true if all of the iterations are also true
+    return True
+\end{lstlisting}
+
+\clearpage
+
+\section{Example}
+
+In this example, I went online to find large prime numbers and determined that 222334565193649 is prime. Plugging this into the code, as below, it is returned as probably prime (100 iterations). 
+
+\begin{lstlisting}
+#example
+primality_test = 222334565193647  
+iterations = 100       
+
+result = miller_rabin_test(primality_test, iterations)
+print(primality_test, "is", ('probably prime' if result else 'composite'))
+\end{lstlisting}
+
+In contrast, when plugging in another number, for example, 222334565193647 (the number above minus two), the code determines that the result is probably a composite. 
+
+\begin{lstlisting}
+#example
+primality_test = 222334565193649 
+iterations = 100       
+
+result = miller_rabin_test(primality_test, iterations)
+print(primality_test, "is", ('probably prime' if result else 'composite'))
+\end{lstlisting}
+
+In an additional proof of the legitimacy of the algorithm, I ran the algorithm for 100 iterations for each number n from 1 to 1000. This printed all 168 primes less than 1000, as noted in the textbook.  
+
+\begin{lstlisting}
+primes_list = []
+primes_count = 0
+for i in range(1000):
+    result = miller_rabin_test(i, 100)
+    if(result):
+        primes_list.append(i)
+        primes_count = primes_count + 1
+print(primes_list)
+print(primes_count)
+\end{lstlisting}
+
+\clearpage
+
+\section{Code Appendix}
+
+\begin{lstlisting}
+import random
+import math
+
+def miller_rabin_test(N, i=10):
+    """
+    Perform the Miller-Rabin primality test on the number N.
+    returns true if the test is inconclusive/fails and N could be prime, and false otherwise if it is composite
+    """
+    if N == 2 or N == 3:
+        return True
+    if N == 1 or N % 2 == 0:
+        return False
+
+    #writing N as 2^k*q
+    k = 0
+    q = N - 1
+    while q % 2 == 0:
+        k += 1
+        q //= 2
+        
+    #witness loop ( repeating k times unless broken by the return )
+    for j in range(k):
+        #choosing a random int between 2 and N-1-1 or N-2
+        a = random.randint(2, N - 2)
+        #breaks the loop if the gcd ever is not 1 (N is divisible by a or a product of it, automatically making it not prime)
+        if math.gcd(a, N) != 1:
+            return False
+
+        #defines x as a to the q mod N
+        x = pow(a, q, N)
+
+        #if x is ever 1 or -1, it will skip to the next iteration of the for loop above (k+1)
+        if x == 1 or x == N - 1:
+            continue
+
+        for j in range(k - 1):
+            x = pow(x, 2, N)
+
+            #searching for when x = -1modN
+            if x == N - 1:
+                break
+        else:
+            return False
+    
+    #only returns true if all of the iterations are also true
+    return True
+
+#example
+primality_test = 222334565193647  
+iterations = 100       
+
+result = miller_rabin_test(primality_test, iterations)
+print(primality_test, "is", ('probably prime' if result else 'composite'))
+
+#additional example
+primes_list = []
+primes_count = 0
+for i in range(1000):
+    result = miller_rabin_test(i, 100)
+    if(result):
+        primes_list.append(i)
+        primes_count = primes_count + 1
+print(primes_list)
+print(primes_count)
+\end{lstlisting}
+
+\end{document}
+
